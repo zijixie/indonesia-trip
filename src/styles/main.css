@@ -1,0 +1,319 @@
+/*
+ * 视觉系统：颜色全部取自这趟行程经过的地方，不是一套通用 UI 色板。
+ * 深海墨 = 地图的海 + 正文；浅礁绿松石 = 航线；木瓜橙 = 此刻/重点。
+ * 三个岛各有一个专属色，只用在很小的面积上（章节标记、地图点）。
+ */
+
+@font-face {
+  font-family: 'Fraunces';
+  src: url('/fonts/fraunces-latin.woff2') format('woff2-variations');
+  font-weight: 300 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  --ocean: #06323d;
+  --ocean-2: #0b6e7f;
+  --ocean-3: #128296;
+
+  /* 礁石绿松石：航线、链接、强调 */
+  --shallow: #10b5a3;
+  --shallow-lite: #7febdc;
+
+  /* 热带三重奏 */
+  --sun: #ff6b35;
+  --hibiscus: #ff3d68;
+  --gold: #ffc24b;
+
+  --sand: #ffd9a0;
+  --shell: #e4f3f0;
+  --shell-2: #d3ebe6;
+
+  /* 一段一色：夜航靛 / 火山紫 / 丛林绿 / 礁石松石 */
+  --night: #2a2f7a;
+  --volcano: #6a3fb0;
+  --jungle: #0e7a5f;
+  --reef: #12b5a8;
+
+  --ink: #0a2b33;
+  --ink-2: #3a5f68;
+  --ink-3: #6f949b;
+
+  --rule: #bcdcd6;
+  --rule-soft: #cfe6e1;
+
+  /* 通栏：内容只靠 padding 内缩，没有居中窄栏 */
+  --gut: clamp(20px, 6vw, 96px);
+
+  /* 顶栏高度。首页 hero 要用负 margin 钻到它底下，所以抽成变量只改一处 */
+  --bar-h: 68px;
+
+  --display: 'Fraunces', 'PingFang SC', 'Hiragino Sans GB', serif;
+  --body: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Hiragino Sans GB',
+    'Microsoft YaHei', 'Segoe UI', Roboto, sans-serif;
+
+  color-scheme: light;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+html,
+body,
+#app {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--shell);
+  color: var(--ink);
+  font-family: var(--body);
+  font-size: 17px;
+  line-height: 1.75;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Fraunces 只管拉丁字母和数字：时刻、航班号、酒店名。中文交给 PingFang。 */
+.fr {
+  font-family: var(--display);
+  font-variation-settings: 'SOFT' 60, 'WONK' 1, 'opsz' 96;
+  font-weight: 500;
+  letter-spacing: -0.012em;
+}
+.fr-light {
+  font-family: var(--display);
+  font-variation-settings: 'SOFT' 70, 'WONK' 1, 'opsz' 120;
+  font-weight: 300;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  margin: 0;
+  font-weight: 600;
+  line-height: 1.22;
+  letter-spacing: -0.02em;
+}
+
+a {
+  color: var(--shallow);
+  text-decoration: none;
+}
+a:hover {
+  color: var(--ocean-2);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+}
+
+:focus-visible {
+  outline: 2px solid var(--sun);
+  outline-offset: 3px;
+  border-radius: 3px;
+}
+
+/* 通栏区块：背景铺满视口，内容靠 --gut 内缩 */
+.bleed {
+  width: 100%;
+  padding-inline: var(--gut);
+}
+
+.stack {
+  padding-block: clamp(48px, 7vw, 92px);
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 11px 20px;
+  border-radius: 999px;
+  border: 1px solid var(--rule);
+  background: #fff;
+  color: var(--ink);
+  font-size: 15px;
+  transition: background 0.18s, border-color 0.18s, color 0.18s;
+}
+.btn:hover {
+  border-color: var(--shallow);
+  color: var(--ocean-2);
+  text-decoration: none;
+}
+.btn--solid {
+  border-color: var(--ocean);
+  background: var(--ocean);
+  color: #fff;
+}
+.btn--solid:hover {
+  background: var(--ocean-2);
+  border-color: var(--ocean-2);
+  color: #fff;
+}
+.btn--sun {
+  border-color: var(--sun);
+  background: var(--sun);
+  color: #fff;
+}
+.btn--sun:hover {
+  background: #ef6a36;
+  border-color: #ef6a36;
+  color: #fff;
+}
+.btn--sm {
+  padding: 7px 15px;
+  font-size: 14px;
+}
+.btn--onDark {
+  border-color: rgba(255, 255, 255, 0.34);
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+  backdrop-filter: blur(6px);
+}
+.btn--onDark:hover {
+  background: rgba(255, 255, 255, 0.18);
+  border-color: rgba(255, 255, 255, 0.6);
+  color: #fff;
+}
+
+input[type='text'],
+select {
+  font: inherit;
+  font-size: 16px;
+  padding: 12px 16px;
+  border-radius: 999px;
+  border: 1px solid var(--rule);
+  background: #fff;
+  color: var(--ink);
+  outline: none;
+}
+input[type='text']:focus,
+select:focus {
+  border-color: var(--shallow);
+  box-shadow: 0 0 0 4px rgba(23, 167, 156, 0.16);
+}
+select {
+  border-radius: 999px;
+}
+
+/*
+ * 一段一个色场。颜色对应那一段实际会看到的东西：
+ * 凌晨 01:35 的夜航、布罗莫破晓时紫转余烬的天、乌布的丛林与金、
+ * 科莫多的绿松石浅滩配粉沙滩。整页读下来就是一路变色。
+ */
+.tint {
+  --c1: var(--ocean-2);
+  --c2: var(--night);
+  --c: var(--ocean-3);
+}
+.tint--depart {
+  --c1: #1a2a6c;
+  --c2: #0b6e7f;
+  --c: var(--night);
+}
+.tint--java {
+  --c1: #5b3e96;
+  --c2: #ff6b35;
+  --c: var(--volcano);
+}
+.tint--bali {
+  --c1: #0e7a5f;
+  --c2: #ffc24b;
+  --c: var(--jungle);
+}
+.tint--komodo {
+  --c1: #12b5a8;
+  --c2: #ff3d68;
+  --c: var(--reef);
+}
+.tint--home {
+  --c1: #0b6e7f;
+  --c2: #1a2a6c;
+  --c: var(--ocean-2);
+}
+.tint-field {
+  background-image: linear-gradient(118deg, var(--c1) 0%, var(--c2) 100%);
+  color: #fff;
+}
+
+.muted {
+  color: var(--ink-2);
+}
+.faint {
+  color: var(--ink-3);
+  font-size: 14.5px;
+}
+
+.lede {
+  font-size: clamp(17px, 1.6vw, 20px);
+  line-height: 1.7;
+  color: var(--ink-2);
+  max-width: 58ch;
+}
+
+.empty-note {
+  padding: 30px 0;
+  color: var(--ink-3);
+  font-size: 16px;
+  border-top: 1px solid var(--rule-soft);
+  border-bottom: 1px solid var(--rule-soft);
+}
+
+.footnote {
+  color: var(--ink-3);
+  font-size: 14.5px;
+  line-height: 1.7;
+  max-width: 74ch;
+}
+
+code {
+  font-family: ui-monospace, Menlo, monospace;
+  font-size: 0.85em;
+  padding: 2px 7px;
+  border-radius: 5px;
+  background: var(--shell-2);
+  color: var(--ink-2);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+/* 触摸目标下限：iOS HIG 建议 44px，低于这个值手指点不准 */
+@media (max-width: 760px) {
+  :root {
+    --bar-h: 56px;
+  }
+  .btn--sm {
+    min-height: 44px;
+    padding: 10px 16px;
+  }
+}
+
+@media (max-width: 640px) {
+  body {
+    font-size: 16px;
+  }
+}
